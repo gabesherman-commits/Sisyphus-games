@@ -97,8 +97,8 @@ function updateUI() {
       else if (spiteUsedSinceBottom) spiteBtn.textContent = 'Spite (Used)';
       else spiteBtn.textContent = 'Spite (Ready)';
     } else {
-      // allow buying Spite as soon as the player has the funds (no bottom-only restriction)
-      spiteBtn.disabled = (typeof StrengthGained === 'number' && StrengthGained < spiteCost);
+      // Spite can only be bought while at the bottom and when player has funds
+      spiteBtn.disabled = !atBottom || (typeof StrengthGained === 'number' && StrengthGained < spiteCost);
       spiteBtn.innerHTML = 'Spite (Cost: <span id="spiteCost">' + Math.max(1, Math.round(spiteCost)) + '</span>)';
     }
   }
@@ -288,12 +288,15 @@ if (upgradeEnduranceBtn) upgradeEnduranceBtn.addEventListener('click', function 
 // buy Spite (one-time purchase)
 const buySpiteBtn = document.getElementById('buySpite');
 if (buySpiteBtn) buySpiteBtn.addEventListener('click', function () {
-  // allow purchase whenever the player has enough StrengthGained
-  if (StrengthGained >= spiteCost && !spiteBought) {
+  // only purchasable at the bottom
+  if (height <= BOTTOM_EPS && StrengthGained >= spiteCost && !spiteBought) {
     StrengthGained -= spiteCost;
     spiteBought = true;
     updateUI();
     saveGame();
+  } else {
+    const el = document.getElementById('saveStatus');
+    if (el) { el.textContent = 'Must be at bottom and have funds to buy Spite'; setTimeout(() => { if (el) el.textContent = ''; }, 1500); }
   }
 });
 
