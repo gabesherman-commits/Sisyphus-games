@@ -25,6 +25,15 @@ let gravity = 5.0; // units per second pulled down by gravity (reduced for balan
 const BOTTOM_EPS = 0.01; // consider at bottom when height <= this
 const VISUAL_MAX_HEIGHT = 100; // game units that map to top of visual stage
 
+// Autoclicker detector state
+let clickTimestamps = []; // recent manual push timestamps (ms)
+const CLICK_WINDOW_MS = 3000; // track clicks in this rolling window
+const CLICK_HISTORY_MAX = 20; // keep at most this many timestamps
+let autoclickDetected = false;
+const AUTOCLICK_COOLDOWN_MS = 5000; // how long to disable push after detection
+const AUTOCLICK_PENALTY_PERCENT = 0.05; // remove this fraction of StrengthGained as penalty
+const AUTOCLICK_MESSAGE = 'Autoclicker detected â€” cooldown applied';
+
 function updateUI() {
   const elHeight = document.getElementById('height');
   const elTotal = document.getElementById('StrengthGained');
@@ -81,12 +90,12 @@ function updateUI() {
     }
   }
 
-  // push button should be disabled when no endurance remains
+  // push button should be disabled when no endurance remains or autoclick cooldown
   const pushBtn = document.getElementById('pushButton');
-  if (pushBtn) pushBtn.disabled = enduranceCurrent < 1;
+  if (pushBtn) pushBtn.disabled = (enduranceCurrent < 1) || autoclickDetected;
   if (upgradeEnduranceBtn) upgradeEnduranceBtn.disabled = !(atBottom && StrengthGained >= enduranceCost);
   if (upgradeRegenBtn) upgradeRegenBtn.disabled = !(atBottom && StrengthGained >= enduranceRegenCost);
-
+  
   // Update visual boulder/man position so the path follows the CSS ramp
   const b = document.getElementById('boulder');
   const stage = document.querySelector('.stage');
