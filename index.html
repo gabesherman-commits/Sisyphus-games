@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sisyphus</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>Sisyphus</h1>
+
+  <div class="stats">
+    <p>Height Gained: <span id="height">0</span></p>
+    <p>Strength Gained: <span id="StrengthGained">0</span></p>
+    <p>Endurance: <span id="enduranceCurrent">10</span>/<span id="enduranceMax">10</span></p>
+    <p>Push Power: <span id="pushPower">1</span> (<span id="pushLevel">0</span>)</p>
+    <p>Muscle Memory /s: <span id="pushPerSecond">0.2</span> (<span id="autoLevel">0</span>)</p>
+  </div>
+
+  <div class="controls">
+    <button id="pushButton">Push the Boulder</button>
+
+    <div class="upgrades">
+      <button id="upgradePower">Pray for strength (Cost: <span id="powerCost">10</span>)</button>
+      <button id="buyAuto">Train Muscle Memory (Cost: <span id="autoCost">25</span>)</button>
+      <button id="upgradeEndurance">Train Endurance (Cost: <span id="enduranceCost">100</span>)</button>
+      <button id="buySpite">Spite (Cost: <span id="spiteCost">500</span>)</button>
+      <button id="resetButton" class="danger">Reset Game</button>
+    </div>
+  </div>
+
+  <div class="stage" aria-hidden="false">
+    <div class="track">
+      
+      <img id="boulder" class="boulder" src="assets/Sisyphus.png" alt="Boulder">
+      <div class="ground"></div>
+    </div>
+  </div>
+
+  <div class="save-status"><span id="saveStatus"></span></div>
+  <div id="spitePopup" class="spite-popup" aria-hidden="true">
+    <div class="spite-content">Spite Active — <span id="spiteTimer">5</span>s</div>
+  </div>
+
+  <script src="game.main.js"></script>
+</body>
+</html>

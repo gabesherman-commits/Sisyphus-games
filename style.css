@@ -1,0 +1,90 @@
+body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; max-width: 720px; margin: 32px auto; padding: 0 16px; color: #222; }
+h1 { margin-bottom: 8px; }
+.stats p { margin: 6px 0; }
+.controls { margin-top: 12px; }
+button { background:#2b8cff; color:white; border:none; padding:10px 14px; border-radius:6px; cursor:pointer; font-size:14px; margin-right:8px; }
+button:active { transform: translateY(1px); }
+.upgrades { margin-top:10px; }
+.save-status { margin-top:8px; color:#666; font-size:13px; }
+
+/* Ramp variables — edit these in-browser to tune the slope visually */
+:root {
+	/* total ground element height (px) */
+	--ramp-height: 1000px;
+	/* rise at left edge (px) — usually 0 for low left side */
+	--ramp-left-rise: 28px;
+	/* rise at right edge (px) — higher value makes the ramp steeper */
+	--ramp-right-rise: 300px;
+	/* ground colors */
+	--ground-top: #8b5e3c;
+	--ground-bottom: #6b4324;
+}
+
+/* Visual stage */
+.stage { width: 100%; height: 320px; border: 1px solid #e6e6e6; margin-top:18px; background: linear-gradient(#f8fafc, #eef3f7); display:flex; align-items:flex-end; }
+.track { position: relative; flex: 1; height: 100%; overflow: hidden; }
+.ground {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: var(--ramp-height);
+	/* create a sloped top edge using clip-path; top edge goes from left-rise to right-rise */
+	clip-path: polygon(
+		0 100%,
+		0 calc(100% - var(--ramp-left-rise)),
+		100% calc(100% - var(--ramp-right-rise)),
+		100% 100%
+	);
+	background: linear-gradient(var(--ground-top), var(--ground-bottom));
+	box-shadow: inset 0 4px 6px rgba(0,0,0,0.15);
+	z-index: 1;
+}
+.boulder { position: absolute; left: 50%; transform: translateX(-50%); bottom: var(--ramp-height); width: 56px; height: 56px; object-fit: contain; display: block; transition: bottom 0.12s linear, left 0.12s linear; }
+
+
+/* Disabled upgrade button look */
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* Ensure the image elements fill their CSS boxes */
+.boulder { width: 56px; height: 56px; }
+
+
+/* Reset / danger button */
+.danger { background: #e55353; }
+
+/* Endurance bar */
+.endurance {
+	width: 220px;
+	height: 12px;
+	background: #ddd;
+	border-radius: 8px;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 8px;
+}
+.endurance .fill {
+	height: 100%;
+	background: linear-gradient(90deg,#4fc08d,#2b8cff);
+	width: 100%;
+	transition: width 0.18s linear;
+}
+
+/* Spite popup */
+.spite-popup {
+	position: fixed;
+	left: 50%;
+	top: 12%;
+	transform: translateX(-50%);
+	background: rgba(40,40,40,0.95);
+	color: #fff;
+	padding: 10px 14px;
+	border-radius: 8px;
+	font-weight: 600;
+	box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+	z-index: 9999;
+	display: none;
+}
+.spite-popup.show { display: block; }
+.spite-content { font-size: 16px; }
